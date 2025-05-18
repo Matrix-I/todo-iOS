@@ -111,6 +111,7 @@ struct ContentView: View {
     private func sortItems(_ items: [Todo]) -> [Todo] {
         switch selectedSortOption {
         case .dateCreated:
+            // Sort by timestamp (newest first)
             return items.sorted { $0.timestamp > $1.timestamp }
         case .dueDate:
             return items.sorted { 
@@ -256,6 +257,15 @@ struct ContentView: View {
                     }
                     .foregroundColor(.gray)
                 }
+                
+                HStack(spacing: 2) {
+                    Image(systemName: "clock")
+                        .font(.caption)
+                    Text("Created \(item.creationDateFormatted)")
+                        .font(.caption)
+                }
+                .foregroundColor(.gray)
+                .padding(.top, 2)
             }
             
             Spacer()

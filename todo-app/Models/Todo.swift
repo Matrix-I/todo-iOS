@@ -47,6 +47,13 @@ public class Todo: NSManagedObject, Identifiable {
         }
         return false
     }
+    
+    var creationDateFormatted: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .medium
+        return formatter.string(from: timestamp)
+    }
 }
 
 extension Todo {
