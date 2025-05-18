@@ -2,6 +2,33 @@ import Foundation
 import CoreData
 import SwiftUI
 
+// Priority enum for type safety and reusability
+enum Priority: String, CaseIterable {
+    case high = "High"
+    case medium = "Medium"
+    case low = "Low"
+    
+    var sortValue: Int {
+        switch self {
+        case .high: return 3
+        case .medium: return 2
+        case .low: return 1
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .high: return .red
+        case .medium: return .orange
+        case .low: return .green
+        }
+    }
+    
+    static var defaultValue: Priority {
+        return .medium
+    }
+}
+
 @objc(Todo)
 public class Todo: NSManagedObject, Identifiable {
     @NSManaged public var id: UUID?
@@ -15,30 +42,19 @@ public class Todo: NSManagedObject, Identifiable {
         return NSFetchRequest<Todo>(entityName: "Todo")
     }
     
-    var priorityColor: Color {
-        switch priority {
-        case "High":
-            return .red
-        case "Medium":
-            return .orange
-        case "Low":
-            return .green
-        default:
-            return .gray
+    var priorityEnum: Priority {
+        guard let priorityString = priority, let priorityCase = Priority(rawValue: priorityString) else {
+            return Priority.defaultValue
         }
+        return priorityCase
+    }
+    
+    var priorityColor: Color {
+        return priorityEnum.color
     }
     
     var prioritySort: Int {
-        switch priority {
-        case "High":
-            return 3
-        case "Medium":
-            return 2
-        case "Low":
-            return 1
-        default:
-            return 0
-        }
+        return priorityEnum.sortValue
     }
     
     var isOverdue: Bool {

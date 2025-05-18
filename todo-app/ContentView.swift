@@ -235,7 +235,7 @@ struct ContentView: View {
                 Text(item.title)
                     .strikethrough(item.isCompleted)
                     .foregroundColor(item.isCompleted ? .gray : .primary)
-                    .fontWeight(item.priority == "High" ? .bold : .regular)
+                    .fontWeight(item.priorityEnum == .high ? .bold : .regular)
                 
                 HStack(spacing: 8) {
                     if let dueDate = item.dueDate {
@@ -252,7 +252,7 @@ struct ContentView: View {
                         Circle()
                             .fill(item.priorityColor)
                             .frame(width: 8, height: 8)
-                        Text(item.priority ?? "Medium")
+                        Text(item.priorityEnum.rawValue)
                             .font(.caption)
                     }
                     .foregroundColor(.gray)
@@ -316,7 +316,7 @@ struct ContentView: View {
             newItem.id = UUID()
             newItem.title = newItemTitle
             newItem.isCompleted = false
-            newItem.priority = "Medium" // Default priority
+            newItem.priority = Priority.defaultValue.rawValue // Default priority
             newItem.dueDate = Calendar.current.date(byAdding: .day, value: 1, to: Date()) // Default due date: tomorrow
             newItem.timestamp = Date()
             

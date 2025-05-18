@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreData
 
 struct TodoDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -10,27 +11,11 @@ struct TodoDetailView: View {
     @State private var priority: Priority
     @State private var dueDate: Date
     
-    enum Priority: String, CaseIterable, Identifiable {
-        case low = "Low"
-        case medium = "Medium"
-        case high = "High"
-        
-        var id: String { self.rawValue }
-        
-        var color: Color {
-            switch self {
-            case .low: return .green
-            case .medium: return .orange
-            case .high: return .red
-            }
-        }
-    }
-    
     init(todo: Todo) {
         self.todo = todo
         _title = State(initialValue: todo.title)
         _isCompleted = State(initialValue: todo.isCompleted)
-        _priority = State(initialValue: Priority(rawValue: todo.priority ?? "Medium") ?? .medium)
+        _priority = State(initialValue: todo.priorityEnum)
         _dueDate = State(initialValue: todo.dueDate ?? Date())
     }
     
