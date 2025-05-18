@@ -40,6 +40,9 @@ public class Todo: NSManagedObject, Identifiable {
     @NSManaged public var timestamp: Date
     @NSManaged public var priority: String?
     @NSManaged public var dueDate: Date?
+    @NSManaged public var hasTime: Bool
+    @NSManaged public var hasAlarm: Bool
+    @NSManaged public var alarmOffset: Int16 // Minutes before due date
     
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Todo> {
         return NSFetchRequest<Todo>(entityName: "Todo")

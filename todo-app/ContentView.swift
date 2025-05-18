@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import UserNotifications
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -14,6 +15,7 @@ struct ContentView: View {
     @State private var showingFilters = false
     @State private var selectedFilter: TodoFilter = .all
     @State private var selectedSortOption: SortOption = .dateCreated
+    @State private var notificationsAuthorized = false
     
     enum TodoFilter {
         case all, active, completed, overdue
@@ -240,10 +242,23 @@ struct ContentView: View {
                 HStack(spacing: 8) {
                     if let dueDate = item.dueDate {
                         HStack(spacing: 2) {
-                            Image(systemName: "calendar")
+                            Image(systemName: item.hasTime ? "clock" : "calendar")
                                 .font(.caption)
-                            Text(dueDate, style: .date)
-                                .font(.caption)
+                            if item.hasTime {
+                                Text(dueDate, style: .date)
+                                    .font(.caption)
+                                Text(dueDate, style: .time)
+                                    .font(.caption)
+                            } else {
+                                Text(dueDate, style: .date)
+                                    .font(.caption)
+                            }
+                            
+                            if item.hasAlarm {
+                                Image(systemName: "bell.fill")
+                                    .font(.caption)
+                                    .foregroundColor(.orange)
+                            }
                         }
                         .foregroundColor(item.isOverdue ? .red : .gray)
                     }
@@ -295,6 +310,9 @@ struct ContentView: View {
                 todoList
             }
             .navigationTitle("Todo List")
+            .onAppear {
+                requestNotificationPermissions()
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     EditButton()
@@ -319,6 +337,9 @@ struct ContentView: View {
             newItem.priority = Priority.defaultValue.rawValue // Default priority
             newItem.dueDate = Calendar.current.date(byAdding: .day, value: 1, to: Date()) // Default due date: tomorrow
             newItem.timestamp = Date()
+            newItem.hasTime = false
+            newItem.hasAlarm = false
+            newItem.alarmOffset = 30 // Default 30 minutes
             
             do {
                 try viewContext.save()
@@ -333,7 +354,13 @@ struct ContentView: View {
     private func toggleComplete(item: Todo) {
         withAnimation {
             item.isCompleted.toggle()
-            item.timestamp = Date()
+            item.timestamp = Date() // Update timestamp when toggling completion
+            
+            // Disable alarm and cancel notifications if the task is completed
+            if item.isCompleted && item.hasAlarm {
+                item.hasAlarm = false // Disable the alarm
+                cancelNotification(for: item)
+            }
             
             do {
                 try viewContext.save()
@@ -342,6 +369,25 @@ struct ContentView: View {
                 print("Unresolved error \(nsError), \(nsError.userInfo)")
             }
         }
+    }
+    
+    // Request notification permissions
+    private func requestNotificationPermissions() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+            if success {
+                DispatchQueue.main.async {
+                    self.notificationsAuthorized = true
+                }
+            } else if let error = error {
+                print("Error requesting notification permissions: \(error)")
+            }
+        }
+    }
+    
+    // Cancel a notification for a todo item
+    private func cancelNotification(for todo: Todo) {
+        guard let id = todo.id?.uuidString else { return }
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
     }
     
     private func deleteItems(offsets: IndexSet) {

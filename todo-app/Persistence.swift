@@ -24,6 +24,20 @@ struct PersistenceController {
             newTodo.title = sampleTitles[i]
             newTodo.isCompleted = i % 2 == 0 // Every other item is completed
             newTodo.timestamp = Date().addingTimeInterval(Double(-i * 86400)) // Each item is a day apart
+            newTodo.priority = i < 2 ? "High" : (i < 4 ? "Medium" : "Low")
+            
+            // Set due date for some items
+            if i % 3 != 0 {
+                let dueDate = Date().addingTimeInterval(Double((i + 1) * 86400)) // Due in future days
+                newTodo.dueDate = dueDate
+                
+                // Add time and alarm for some items
+                if i % 2 == 0 {
+                    newTodo.hasTime = true
+                    newTodo.hasAlarm = true
+                    newTodo.alarmOffset = Int16([15, 30, 60, 120, 1440][i % 5]) // Different reminder times
+                }
+            }
         }
         do {
             try viewContext.save()
