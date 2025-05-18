@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		DB98E07A2DDA177E0097DF96 /* todo-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "todo-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DB98E08C2DDA17800097DF96 /* todo-appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "todo-appTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DB98E0962DDA17800097DF96 /* todo-appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "todo-appUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB98E07A2DDA177E0097DF96 /* CHECKLIST.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CHECKLIST.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB98E08C2DDA17800097DF96 /* CHECKLISTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CHECKLISTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB98E0962DDA17800097DF96 /* CHECKLISTUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CHECKLISTUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -85,9 +85,9 @@
 		DB98E07B2DDA177E0097DF96 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DB98E07A2DDA177E0097DF96 /* todo-app.app */,
-				DB98E08C2DDA17800097DF96 /* todo-appTests.xctest */,
-				DB98E0962DDA17800097DF96 /* todo-appUITests.xctest */,
+				DB98E07A2DDA177E0097DF96 /* CHECKLIST.app */,
+				DB98E08C2DDA17800097DF96 /* CHECKLISTTests.xctest */,
+				DB98E0962DDA17800097DF96 /* CHECKLISTUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DB98E0792DDA177E0097DF96 /* todo-app */ = {
+		DB98E0792DDA177E0097DF96 /* CHECKLIST */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DB98E0A02DDA17800097DF96 /* Build configuration list for PBXNativeTarget "todo-app" */;
+			buildConfigurationList = DB98E0A02DDA17800097DF96 /* Build configuration list for PBXNativeTarget "CHECKLIST" */;
 			buildPhases = (
 				DB98E0762DDA177E0097DF96 /* Sources */,
 				DB98E0772DDA177E0097DF96 /* Frameworks */,
@@ -110,16 +110,16 @@
 			fileSystemSynchronizedGroups = (
 				DB98E07C2DDA177E0097DF96 /* todo-app */,
 			);
-			name = "todo-app";
+			name = CHECKLIST;
 			packageProductDependencies = (
 			);
 			productName = "todo-app";
-			productReference = DB98E07A2DDA177E0097DF96 /* todo-app.app */;
+			productReference = DB98E07A2DDA177E0097DF96 /* CHECKLIST.app */;
 			productType = "com.apple.product-type.application";
 		};
-		DB98E08B2DDA17800097DF96 /* todo-appTests */ = {
+		DB98E08B2DDA17800097DF96 /* CHECKLISTTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DB98E0A32DDA17800097DF96 /* Build configuration list for PBXNativeTarget "todo-appTests" */;
+			buildConfigurationList = DB98E0A32DDA17800097DF96 /* Build configuration list for PBXNativeTarget "CHECKLISTTests" */;
 			buildPhases = (
 				DB98E0882DDA17800097DF96 /* Sources */,
 				DB98E0892DDA17800097DF96 /* Frameworks */,
@@ -133,16 +133,16 @@
 			fileSystemSynchronizedGroups = (
 				DB98E08F2DDA17800097DF96 /* todo-appTests */,
 			);
-			name = "todo-appTests";
+			name = CHECKLISTTests;
 			packageProductDependencies = (
 			);
 			productName = "todo-appTests";
-			productReference = DB98E08C2DDA17800097DF96 /* todo-appTests.xctest */;
+			productReference = DB98E08C2DDA17800097DF96 /* CHECKLISTTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		DB98E0952DDA17800097DF96 /* todo-appUITests */ = {
+		DB98E0952DDA17800097DF96 /* CHECKLISTUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DB98E0A62DDA17800097DF96 /* Build configuration list for PBXNativeTarget "todo-appUITests" */;
+			buildConfigurationList = DB98E0A62DDA17800097DF96 /* Build configuration list for PBXNativeTarget "CHECKLISTUITests" */;
 			buildPhases = (
 				DB98E0922DDA17800097DF96 /* Sources */,
 				DB98E0932DDA17800097DF96 /* Frameworks */,
@@ -156,11 +156,11 @@
 			fileSystemSynchronizedGroups = (
 				DB98E0992DDA17800097DF96 /* todo-appUITests */,
 			);
-			name = "todo-appUITests";
+			name = CHECKLISTUITests;
 			packageProductDependencies = (
 			);
 			productName = "todo-appUITests";
-			productReference = DB98E0962DDA17800097DF96 /* todo-appUITests.xctest */;
+			productReference = DB98E0962DDA17800097DF96 /* CHECKLISTUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +186,7 @@
 					};
 				};
 			};
-			buildConfigurationList = DB98E0752DDA177E0097DF96 /* Build configuration list for PBXProject "todo-app" */;
+			buildConfigurationList = DB98E0752DDA177E0097DF96 /* Build configuration list for PBXProject "CHECKLIST" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -200,9 +200,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DB98E0792DDA177E0097DF96 /* todo-app */,
-				DB98E08B2DDA17800097DF96 /* todo-appTests */,
-				DB98E0952DDA17800097DF96 /* todo-appUITests */,
+				DB98E0792DDA177E0097DF96 /* CHECKLIST */,
+				DB98E08B2DDA17800097DF96 /* CHECKLISTTests */,
+				DB98E0952DDA17800097DF96 /* CHECKLISTUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -258,12 +258,12 @@
 /* Begin PBXTargetDependency section */
 		DB98E08E2DDA17800097DF96 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DB98E0792DDA177E0097DF96 /* todo-app */;
+			target = DB98E0792DDA177E0097DF96 /* CHECKLIST */;
 			targetProxy = DB98E08D2DDA17800097DF96 /* PBXContainerItemProxy */;
 		};
 		DB98E0982DDA17800097DF96 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DB98E0792DDA177E0097DF96 /* todo-app */;
+			target = DB98E0792DDA177E0097DF96 /* CHECKLIST */;
 			targetProxy = DB98E0972DDA17800097DF96 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -461,7 +461,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/todo-app.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/todo-app";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CHECKLIST.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CHECKLIST";
 			};
 			name = Debug;
 		};
@@ -480,7 +480,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/todo-app.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/todo-app";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CHECKLIST.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CHECKLIST";
 			};
 			name = Release;
 		};
@@ -521,7 +521,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DB98E0752DDA177E0097DF96 /* Build configuration list for PBXProject "todo-app" */ = {
+		DB98E0752DDA177E0097DF96 /* Build configuration list for PBXProject "CHECKLIST" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DB98E09E2DDA17800097DF96 /* Debug */,
@@ -530,7 +530,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DB98E0A02DDA17800097DF96 /* Build configuration list for PBXNativeTarget "todo-app" */ = {
+		DB98E0A02DDA17800097DF96 /* Build configuration list for PBXNativeTarget "CHECKLIST" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DB98E0A12DDA17800097DF96 /* Debug */,
@@ -539,7 +539,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DB98E0A32DDA17800097DF96 /* Build configuration list for PBXNativeTarget "todo-appTests" */ = {
+		DB98E0A32DDA17800097DF96 /* Build configuration list for PBXNativeTarget "CHECKLISTTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DB98E0A42DDA17800097DF96 /* Debug */,
@@ -548,7 +548,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DB98E0A62DDA17800097DF96 /* Build configuration list for PBXNativeTarget "todo-appUITests" */ = {
+		DB98E0A62DDA17800097DF96 /* Build configuration list for PBXNativeTarget "CHECKLISTUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DB98E0A72DDA17800097DF96 /* Debug */,
