@@ -3,7 +3,7 @@ import CoreData
 import SwiftUI
 
 // Priority enum for type safety and reusability
-enum Priority: String, CaseIterable {
+enum Priority: String, CaseIterable, Identifiable {
     case high = "High"
     case medium = "Medium"
     case low = "Low"
@@ -27,6 +27,9 @@ enum Priority: String, CaseIterable {
     static var defaultValue: Priority {
         return .medium
     }
+    
+    // Conformance to Identifiable
+    var id: String { self.rawValue }
 }
 
 @objc(Todo)
