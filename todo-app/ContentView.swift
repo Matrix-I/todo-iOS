@@ -312,6 +312,7 @@ struct ContentView: View {
             .navigationTitle("Todo List")
             .onAppear {
                 requestNotificationPermissions()
+                clearNotificationBadge()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -388,6 +389,16 @@ struct ContentView: View {
     private func cancelNotification(for todo: Todo) {
         guard let id = todo.id?.uuidString else { return }
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
+    }
+    
+    // Clear the notification badge when app is opened
+    private func clearNotificationBadge() {
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        UNUserNotificationCenter.current().setBadgeCount(0) { error in
+            if let error = error {
+                print("Error clearing badge: \(error)")
+            }
+        }
     }
     
     private func deleteItems(offsets: IndexSet) {

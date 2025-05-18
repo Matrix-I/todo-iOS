@@ -182,8 +182,13 @@ struct TodoDetailView: View {
         
         // Create notification content
         let content = UNMutableNotificationContent()
+        
+        // Calculate remaining time between notification time and due date
+        let remainingMinutes = Int(dueDate.timeIntervalSince(notificationTime) / 60)
+        let formattedTime = formatRemainingTime(minutes: remainingMinutes)
+        
         content.title = "Todo Reminder"
-        content.body = todo.title
+        content.body = "\(todo.title) - due in \(formattedTime)"
         content.sound = .default
         content.badge = 1
         
@@ -206,6 +211,31 @@ struct TodoDetailView: View {
     private func cancelNotification(for todo: Todo) {
         guard let id = todo.id?.uuidString else { return }
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
+    }
+    
+    // Helper function to format remaining time in a user-friendly way
+    private func formatRemainingTime(minutes: Int) -> String {
+        if minutes < 60 {
+            return "\(minutes) minute\(minutes == 1 ? "" : "s")"
+        } else if minutes < 1440 { // less than a day
+            let hours = minutes / 60
+            let remainingMinutes = minutes % 60
+            
+            if remainingMinutes == 0 {
+                return "\(hours) hour\(hours == 1 ? "" : "s")"
+            } else {
+                return "\(hours) hour\(hours == 1 ? "" : "s") \(remainingMinutes) minute\(remainingMinutes == 1 ? "" : "s")"
+            }
+        } else { // days
+            let days = minutes / 1440
+            let remainingHours = (minutes % 1440) / 60
+            
+            if remainingHours == 0 {
+                return "\(days) day\(days == 1 ? "" : "s")"
+            } else {
+                return "\(days) day\(days == 1 ? "" : "s") \(remainingHours) hour\(remainingHours == 1 ? "" : "s")"
+            }
+        }
     }
 }
 
