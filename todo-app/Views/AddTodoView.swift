@@ -15,8 +15,28 @@ struct AddTodoView: View {
     @State private var hasAlarm = false
     @State private var alarmOffset = 30
     
+    // Time constants
+    private enum TimeConstants {
+        static let minutesInHour = 60
+        static let hoursInDay = 24
+        static let minutesInDay = minutesInHour * hoursInDay
+        
+        // Alarm offset options
+        static let fifteenMinutes = 15
+        static let thirtyMinutes = 30
+        static let oneHour = minutesInHour
+        static let twoHours = oneHour * 2
+        static let oneDay = minutesInDay
+    }
+    
     // Available alarm offset options in minutes
-    private let alarmOffsetOptions = [15, 30, 60, 120, 1440] // 15 min, 30 min, 1 hour, 2 hours, 1 day
+    private let alarmOffsetOptions = [
+        TimeConstants.fifteenMinutes,
+        TimeConstants.thirtyMinutes,
+        TimeConstants.oneHour,
+        TimeConstants.twoHours,
+        TimeConstants.oneDay
+    ]
     
     var body: some View {
         NavigationView {
@@ -35,11 +55,11 @@ struct AddTodoView: View {
                         
                         if hasAlarm {
                             Picker("Remind me", selection: $alarmOffset) {
-                                Text("15 minutes before").tag(15)
-                                Text("30 minutes before").tag(30)
-                                Text("1 hour before").tag(60)
-                                Text("2 hours before").tag(120)
-                                Text("1 day before").tag(1440)
+                                Text("15 minutes before").tag(TimeConstants.fifteenMinutes)
+                                Text("30 minutes before").tag(TimeConstants.thirtyMinutes)
+                                Text("1 hour before").tag(TimeConstants.oneHour)
+                                Text("2 hours before").tag(TimeConstants.twoHours)
+                                Text("1 day before").tag(TimeConstants.oneDay)
                             }
                             .pickerStyle(MenuPickerStyle())
                         }
@@ -63,25 +83,37 @@ struct AddTodoView: View {
                 
                 Section {
                     HStack {
-                        Button(action: createTodo) {
-                            Text("Create")
-                                .frame(maxWidth: .infinity)
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(title.isEmpty ? Color.gray : Color.blue)
-                                .cornerRadius(10)
+                        // Create button with clear tap area
+                        ZStack {
+                            Button(action: createTodo) {
+                                Text("Create")
+                                    .frame(maxWidth: .infinity)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .background(title.isEmpty ? Color.gray : Color.blue)
+                                    .cornerRadius(10)
+                            }
+                            .buttonStyle(BorderlessButtonStyle()) // Ensures tap area is confined to the button
                         }
-                        .disabled(title.isEmpty)
+                        .frame(maxWidth: .infinity)
                         
-                        Button(action: { isPresented = false }) {
-                            Text("Cancel")
-                                .frame(maxWidth: .infinity)
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.blue)
-                                .cornerRadius(10)
+                        // Cancel button with clear tap area
+                        ZStack {
+                            Button(action: { isPresented = false }) {
+                                Text("Cancel")
+                                    .frame(maxWidth: .infinity)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(10)
+                            }
+                            .buttonStyle(BorderlessButtonStyle()) // Ensures tap area is confined to the button
                         }
+                        .frame(maxWidth: .infinity)
                     }
+                    // Make the section itself non-interactive
+                    .contentShape(Rectangle())
+                    .allowsHitTesting(true) // Allow hit testing only for the buttons
                 }
             }
             .navigationTitle("New Task")
@@ -89,6 +121,9 @@ struct AddTodoView: View {
     }
     
     private func createTodo() {
+        // Only proceed if title is not empty
+        guard !title.isEmpty else { return }
+        
         withAnimation {
             let newItem = Todo(context: viewContext)
             newItem.id = UUID()
@@ -158,26 +193,32 @@ struct AddTodoView: View {
     
     // Helper function to format remaining time in a user-friendly way
     private func formatRemainingTime(minutes: Int) -> String {
-        if minutes < 60 {
-            return "\(minutes) minute\(minutes == 1 ? "" : "s")"
-        } else if minutes < 1440 { // less than a day
-            let hours = minutes / 60
-            let remainingMinutes = minutes % 60
+        // Format a time unit with proper pluralization
+        let formatUnit = { (value: Int, unit: String) -> String in
+            "\(value) \(unit)\(value == 1 ? "" : "s")"
+        }
+        
+        // Calculate time components
+        let days = minutes / TimeConstants.minutesInDay
+        let hours = (minutes % TimeConstants.minutesInDay) / TimeConstants.minutesInHour
+        let mins = minutes % TimeConstants.minutesInHour
+        
+        // Build the formatted string based on available components
+        switch (days, hours, mins) {
+        case (0, 0, _):  // Only minutes
+            return formatUnit(mins, "minute")
             
-            if remainingMinutes == 0 {
-                return "\(hours) hour\(hours == 1 ? "" : "s")"
-            } else {
-                return "\(hours) hour\(hours == 1 ? "" : "s") \(remainingMinutes) minute\(remainingMinutes == 1 ? "" : "s")"
-            }
-        } else { // days
-            let days = minutes / 1440
-            let remainingHours = (minutes % 1440) / 60
+        case (0, _, 0):  // Only hours
+            return formatUnit(hours, "hour")
             
-            if remainingHours == 0 {
-                return "\(days) day\(days == 1 ? "" : "s")"
-            } else {
-                return "\(days) day\(days == 1 ? "" : "s") \(remainingHours) hour\(remainingHours == 1 ? "" : "s")"
-            }
+        case (0, _, _):  // Hours and minutes
+            return "\(formatUnit(hours, "hour")) \(formatUnit(mins, "minute"))"
+            
+        case (_, 0, _):  // Only days
+            return formatUnit(days, "day")
+            
+        default:         // Days and hours
+            return "\(formatUnit(days, "day")) \(formatUnit(hours, "hour"))"
         }
     }
 }
