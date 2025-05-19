@@ -17,6 +17,8 @@ struct ContentView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     @State private var newItemTitle = ""
+    @State private var showingAddSheet = false
+    @State private var showingClearAllAlert = false
     @State private var showingFilters = false
     @State private var selectedFilter: TodoFilter = .all
     @State private var selectedSortOption: SortOption = .dueDate
@@ -142,22 +144,25 @@ struct ContentView: View {
     
     // MARK: - View Components
     
-    private var addTaskBar: some View {
-        HStack {
-            TextField("Add a new task...", text: $newItemTitle)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-            
-            Button(action: addItem) {
-                Image(systemName: "plus.circle.fill")
-                    .font(.title2)
-                    .foregroundColor(.blue)
+    // Floating action button for adding new tasks
+    private var addButton: some View {
+        VStack {
+            Spacer()
+            HStack {
+                Spacer()
+                Button(action: { showingAddSheet = true }) {
+                    Image(systemName: "plus")
+                        .font(.title)
+                        .foregroundColor(.white)
+                        .frame(width: 60, height: 60)
+                        .background(Color.blue)
+                        .clipShape(Circle())
+                        .shadow(radius: 4)
+                }
+                .padding(.trailing, 20)
+                .padding(.bottom, 20)
             }
-            .disabled(newItemTitle.isEmpty)
-            .padding(.trailing, 8)
         }
-        .padding(.vertical, 8)
-        .background(Color(.systemGray6))
     }
     
     private var filterMenu: some View {
@@ -290,72 +295,46 @@ struct ContentView: View {
     // MARK: - Body
     
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                addTaskBar
-                filterSortBar
-                todoList
-            }
-            .navigationTitle("Todo List")
-            .onAppear {
-                requestNotificationPermissions()
-                clearNotificationBadge()
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    EditButton()
+        ZStack {
+            NavigationView {
+                VStack(spacing: 0) {
+                    filterSortBar
+                    todoList
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    if !items.isEmpty {
-                        Button(action: clearAllItems) {
-                            Text("Clear All")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        EditButton()
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        if !items.isEmpty {
+                            Button(action: { showingClearAllAlert = true }) {
+                                Text("Clear All")
+                            }
+                            .alert(isPresented: $showingClearAllAlert) {
+                                Alert(
+                                    title: Text("Clear All Tasks"),
+                                    message: Text("Are you sure you want to delete all tasks? This action cannot be undone."),
+                                    primaryButton: .destructive(Text("Confirm")) {
+                                        clearAllItems()
+                                    },
+                                    secondaryButton: .cancel()
+                                )
+                            }
                         }
                     }
                 }
+                .navigationTitle("Todo List")
+                .onAppear {
+                    requestNotificationPermissions()
+                    clearNotificationBadge()
+                }
             }
+            
+            // Floating action button
+            addButton
         }
-    }
-    
-    private func addItem() {
-        withAnimation {
-            let newItem = Todo(context: viewContext)
-            newItem.id = UUID()
-            newItem.title = newItemTitle
-            newItem.isCompleted = false
-            newItem.priority = Priority.defaultValue.rawValue // Default priority
-            newItem.dueDate = Calendar.current.date(byAdding: .day, value: 1, to: Date()) // Default due date: tomorrow
-            newItem.timestamp = Date()
-            newItem.hasTime = false
-            newItem.hasAlarm = false
-            newItem.alarmOffset = 30 // Default 30 minutes
-            
-            do {
-                try viewContext.save()
-                newItemTitle = ""
-            } catch {
-                let nsError = error as NSError
-                print("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-    
-    private func toggleComplete(item: Todo) {
-        withAnimation {
-            item.isCompleted.toggle()
-            item.timestamp = Date() // Update timestamp when toggling completion
-            
-            // Disable alarm and cancel notifications if the task is completed
-            if item.isCompleted && item.hasAlarm {
-                item.hasAlarm = false // Disable the alarm
-                cancelNotification(for: item)
-            }
-            
-            do {
-                try viewContext.save()
-            } catch {
-                let nsError = error as NSError
-                print("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+        .sheet(isPresented: $showingAddSheet) {
+            AddTodoView(isPresented: $showingAddSheet, viewContext: viewContext)
         }
     }
     
@@ -383,6 +362,26 @@ struct ContentView: View {
         UNUserNotificationCenter.current().setBadgeCount(0) { error in
             if let error = error {
                 print("Error clearing badge: \(error)")
+            }
+        }
+    }
+    
+    private func toggleComplete(item: Todo) {
+        withAnimation {
+            item.isCompleted.toggle()
+            item.timestamp = Date() // Update timestamp when toggling completion
+            
+            // Disable alarm and cancel notifications if the task is completed
+            if item.isCompleted && item.hasAlarm {
+                item.hasAlarm = false // Disable the alarm
+                cancelNotification(for: item)
+            }
+            
+            do {
+                try viewContext.save()
+            } catch {
+                let nsError = error as NSError
+                print("Unresolved error \(nsError), \(nsError.userInfo)")
             }
         }
     }
