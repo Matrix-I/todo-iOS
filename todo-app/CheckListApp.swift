@@ -13,7 +13,6 @@ struct CheckListApp: App {
     
     init() {
         // Clear badges on app launch
-        UIApplication.shared.applicationIconBadgeNumber = 0
         UNUserNotificationCenter.current().setBadgeCount(0, withCompletionHandler: nil)
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
     }
@@ -24,7 +23,6 @@ struct CheckListApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .onAppear {
                     // Clear badges when app appears
-                    UIApplication.shared.applicationIconBadgeNumber = 0
                     UNUserNotificationCenter.current().setBadgeCount(0, withCompletionHandler: nil)
                 }
         }

@@ -82,7 +82,11 @@ class NotificationManager: NSObject, ObservableObject, UNUserNotificationCenterD
     
     private func updateBadgeCount() {
         // Only show badge for unread notifications
-        UIApplication.shared.applicationIconBadgeNumber = notifications.count
+        UNUserNotificationCenter.current().setBadgeCount(Int(notifications.count)) { error in
+            if let error = error {
+                print("Error updating badge count: \(error)")
+            }
+        }
     }
     
     // MARK: - UNUserNotificationCenterDelegate
@@ -124,7 +128,11 @@ class NotificationManager: NSObject, ObservableObject, UNUserNotificationCenterD
         // Update notifications list and badge
         notifications = Array(appNotifications.values)
         updateBadgeCount()
-        UIApplication.shared.applicationIconBadgeNumber = 0
+        UNUserNotificationCenter.current().setBadgeCount(0) { error in
+            if let error = error {
+                print("Error clearing badge: \(error)")
+            }
+        }
         completionHandler()
     }
 }

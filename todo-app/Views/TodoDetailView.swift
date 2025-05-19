@@ -117,6 +117,7 @@ struct TodoDetailView: View {
             todo.isCompleted = isCompleted
             todo.priority = priority.rawValue
             todo.dueDate = dueDate
+            todo.timestamp = Date()
             
             // If task is completed, disable time and alarm settings
             if isCompleted {
@@ -135,8 +136,6 @@ struct TodoDetailView: View {
                     cancelNotification(for: todo)
                 }
             }
-            
-            todo.timestamp = Date()
             
             do {
                 try viewContext.save()

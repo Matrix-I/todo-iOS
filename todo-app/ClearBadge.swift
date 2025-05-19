@@ -28,7 +28,11 @@ struct ClearBadgeView: View {
     
     func clearAllBadges() {
         // Clear application badge
-        UIApplication.shared.applicationIconBadgeNumber = 0
+        UNUserNotificationCenter.current().setBadgeCount(0) { error in
+            if let error = error {
+                print("Error clearing badge: \(error)")
+            }
+        }
         
         // Clear notification center badge
         UNUserNotificationCenter.current().setBadgeCount(0) { error in
